@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KDA Student Achievements Showcase (Toggle Switch)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Design Variables and Reset --- */
+        :root {
+            /* LIGHT MODE COLORS */
+            --primary-blue: #0A3D62; 
+            --accent-green: #38C172; 
+            --body-bg: #F4F7F9; 
+            --card-bg: white;
+            --text-color: #333;
+            --secondary-text: #666;
+            --shadow-color: rgba(0,0,0,0.1);
+            --header-bg: white;
+            --filter-bg: white;
+            --switch-bg: #ccc;
+            --switch-dot: white;
+        }
+
+        /* DARK MODE OVERRIDES */
+        body.dark-mode {
+            --body-bg: #121212; 
+            --card-bg: #1F1F1F; 
+            --text-color: #E0E0E0; 
+            --secondary-text: #A0A0A0; 
+            --shadow-color: rgba(0,0,0,0.4);
+            --header-bg: #1F1F1F;
+            --filter-bg: #1F1F1F;
+            --primary-blue: #4A90E2;
+            --switch-bg: #4A90E2;
+            --switch-dot: #121212;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            background-color: var(--body-bg);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* --- Header and Navigation --- */
+        .main-header {
+            background-color: var(--header-bg);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .main-header h1 {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+        }
+
+        .main-header nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .main-header nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            margin-left: 20px;
+            padding: 8px 10px;
+            transition: color 0.3s;
+        }
+
+        .main-header nav a.active {
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .apply-btn {
+            background-color: var(--accent-green);
+            color: white !important;
+            padding: 10px 18px !important;
+            border-radius: 4px;
+            font-weight: bold;
+            border-bottom: none !important;
+            margin-left: 20px;
+        }
+
+        /* --- DARK MODE TOGGLE SWITCH STYLES --- */
+        .toggle-switch-container {
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .toggle-switch-container .icon {
+            font-size: 1.2rem;
+            margin: 0 5px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 25px;
+        }
+
+        /* Hide default checkbox */
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--switch-bg);
+            transition: .4s;
+            border-radius: 25px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 19px;
+            width: 19px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--switch-dot);
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        /* When checked, slide the dot and change color */
+        input:checked + .slider {
+            background-color: var(--switch-bg);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(25px);
+        }
+        /* --- END TOGGLE SWITCH STYLES --- */
+
+        /* --- Achievement Showcase and Filters --- */
+        .achievement-showcase {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .achievement-showcase h2 {
+            text-align: center;
+            color: var(--primary-blue);
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+        }
+
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: var(--filter-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            flex-wrap: wrap; 
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .filter-bar select, .filter-bar input {
+            padding: 10px 15px;
+            border: 1px solid var(--secondary-text);
+            border-radius: 5px;
+            font-size: 1rem;
+            min-width: 180px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        /* --- Achievement Grid and Cards (existing styles preserved) --- */
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .achievement-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px var(--shadow-color);
+        }
+
+        .media-container {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            background-color: #2F2F2F;
+        }
+        
+        .media-container img, 
+        .media-container iframe {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border: none;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .category-tag {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        /* Distinct Tag Colors */
+        .category-tag.academic { background-color: #E74C3C; } 
+        .category-tag.sports { background-color: #3498DB; }   
+        .category-tag.arts { background-color: #9B59B6; }      
+        .category-tag.leadership { background-color: #F1C40F; color: var(--dark-text);} 
+        body.dark-mode .category-tag.leadership { color: #333; } 
+
+
+        .card-content h3 {
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+            color: var(--primary-blue);
+        }
+
+        .card-content p {
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            min-height: 40px; 
+            color: var(--secondary-text);
+        }
+
+        .read-more {
+            color: var(--accent-green);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+
+        .read-more:hover {
+            color: var(--primary-blue);
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <h1>KDA Logo/Name</h1>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#" class="active">Achievements</a>
+            <a href="#">Contacts</a>
+            
+            <div class="toggle-switch-container">
+                <span class="icon">☀️</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="dark-mode-toggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="icon">🌙</span>
+            </div>
+            <a href="#" class="apply-btn">Apply Now</a>
+        </nav>
+    </header>
+
+    <main class="achievement-showcase">
+        <h2>Celebrating Our Students' Success</h2>
+        <p style="text-align: center; margin-bottom: 20px;">Browse and celebrate the hard work of KDA students in academics, sports, arts, and leadership.</p>
+
+        <div class="filter-bar">
+            <select id="category-filter" aria-label="Filter by Achievement Category">
+                <option value="all">All Categories</option>
+                <option value="academic">Academic 🧠</option>
+                <option value="sports">Sports 🏆</option>
+                <option value="arts">Arts & Culture 🎨</option>
+                <option value="leadership">Leadership 🤝</option>
+            </select>
+
+            <select id="year-filter" aria-label="Filter by Year">
+                <option value="all">All Years</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+            </select>
+
+            <input type="text" id="search-bar" placeholder="Search by student, subject, or story...">
+        </div>
+
+        <section id="achievement-grid" class="achievement-grid">
+            
+            <div class="achievement-card" data-category="academic" data-year="2025">
+                <div class="media-container">
+                    <img src="https://via.placeholder.com/600x400/E74C3C/FFFFFF?text=IMAGE+OF+JANET" alt="Student holding a trophy">
+                </div>
+                <div class="card-content">
+                    <span class="category-tag academic">Academic</span>
+                    <h3>Janet Uwizeye: Math Olympiad Winner</h3>
+                    <p>Janet secured 1st place in the National Math Competition with a perfect score. This is the caption space for details.</p>
+                    <a href="#" class="read-more">Read Full Story →</a>
+                </div>
+            </div>
+
+            <div class="achievement-card" data-category="sports" data-year="2025">
+                <div class="media-container">
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&showinfo=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="KDA Football Highlight Video"></iframe>
+                </div>
+                <div class="card-content">
+                    <span class="category-tag sports">Sports</span>
+                    <h3>KDA Wins Football Tournament (Video)</h3>
+                    <p>Watch the highlights! Our junior varsity team took home the trophy after a thrilling final match (3-2).</p>
+                    <a href="#" class="read-more">Read Full Story →</a>
+                </div>
+            </div>
+
+            <div class="achievement-card" data-category="leadership" data-year="2025">
+                <div class="media-container">
+                    <img src="https://via.placeholder.com/600x400/F1C40F/333333?text=LEADERSHIP+TEAM" alt="Students in a meeting">
+                </div>
+                <div class="card-content">
+                    <span class="category-tag leadership">Leadership</span>
+                    <h3>Student Council Drives New Initiative</h3>
+                    <p>The leadership team successfully launched the school's recycling and sustainability program. This is the caption space for details.</p>
+                    <a href="#" class="read-more">Read Full Story →</a>
+                </div>
+            </div>
+            
+             <div class="achievement-card" data-category="academic" data-year="2024">
+                <div class="media-container">
+                    <img src="https://via.placeholder.com/600x400/E74C3C/FFFFFF?text=SCIENCE+FAIR" alt="Student with a science project">
+                </div>
+                <div class="card-content">
+                    <span class="category-tag academic">Academic</span>
+                    <h3>Best Overall Project at Regional Fair</h3>
+                    <p>The Grade 11 Science team won top honors for their innovative water purification system. This is the caption space for details.</p>
+                    <a href="#" class="read-more">Read Full Story →</a>
+                </div>
+            </div>
+            
+             <div class="achievement-card" data-category="arts" data-year="2024">
+                <div class="media-container">
+                    <img src="https://via.placeholder.com/600x400/9B59B6/FFFFFF?text=ART+GALLERY" alt="Student painting">
+                </div>
+                <div class="card-content">
+                    <span class="category-tag arts">Arts</span>
+                    <h3>Sarah's Sculpture Featured in Gallery</h3>
+                    <p>The local gallery selected Sarah Mutoni's clay sculpture for its 'Young Artists' showcase. This is the caption space for details.</p>
+                    <a href="#" class="read-more">Read Full Story →</a>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
+
+            // --- DARK MODE LOGIC ---
+            const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+            const savedMode = localStorage.getItem('mode');
+
+            // Apply saved mode or system preference on load
+            if (savedMode === 'dark' || (savedMode === null && prefersDarkScheme)) {
+                body.classList.add('dark-mode');
+                darkModeToggle.checked = true; // Set the switch to the 'on' position
+            }
+
+            // Handle switch click
+            darkModeToggle.addEventListener('change', () => {
+                body.classList.toggle('dark-mode');
+                
+                // Save preference to localStorage
+                let currentMode = body.classList.contains('dark-mode') ? 'dark' : 'light';
+                localStorage.setItem('mode', currentMode);
+            });
+            // --- END DARK MODE LOGIC ---
+
+
+            // --- EXISTING FILTER LOGIC ---
+            const categoryFilter = document.getElementById('category-filter');
+            const yearFilter = document.getElementById('year-filter');
+            const searchBar = document.getElementById('search-bar');
+            const achievementGrid = document.getElementById('achievement-grid');
+            const cards = achievementGrid.querySelectorAll('.achievement-card');
+
+            categoryFilter.addEventListener('change', filterAchievements);
+            yearFilter.addEventListener('change', filterAchievements);
+            searchBar.addEventListener('input', filterAchievements); 
+
+            function filterAchievements() {
+                const selectedCategory = categoryFilter.value;
+                const selectedYear = yearFilter.value;
+                const searchTerm = searchBar.value.toLowerCase().trim();
+
+                cards.forEach(card => {
+                    const cardCategory = card.dataset.category;
+                    const cardYear = card.dataset.year;
+                    const cardText = card.textContent.toLowerCase();
+
+                    const categoryMatch = selectedCategory === 'all' || cardCategory === selectedCategory;
+                    const yearMatch = selectedYear === 'all' || cardYear === selectedYear;
+                    const searchMatch = cardText.includes(searchTerm);
+
+                    if (categoryMatch && yearMatch && searchMatch) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
