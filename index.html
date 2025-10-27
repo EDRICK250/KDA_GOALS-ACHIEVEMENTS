@@ -1,5 +1,4 @@
-
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -453,5 +452,264 @@
             }
         });
     </script>
+    <footer class="site-footer" role="contentinfo">
+      <div class="footer-inner">
+        <div class="footer-left">
+          <h3>KDA Logo/Name</h3>
+          <p class="footer-tagline">Celebrating student achievement across academics, sports, arts, and leadership.</p>
+        </div>
+
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <a href="#">Home</a>
+          <a href="#">About</a>
+          <a href="#">Achievements</a>
+          <a href="#">Contacts</a>
+          <a href="#" class="apply-btn">Apply Now</a>
+        </nav>
+
+        <div class="footer-right">
+          <p>&copy; <span id="current-year"></span> KDA. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <style>
+      .site-footer {
+        background-color: var(--header-bg);
+        color: var(--secondary-text);
+        padding: 28px 5%;
+        box-shadow: 0 -2px 6px var(--shadow-color);
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .site-footer .footer-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .site-footer h3 {
+        color: var(--primary-blue);
+        margin: 0 0 6px 0;
+        font-size: 1.05rem;
+      }
+
+      .footer-tagline {
+        margin: 0;
+        color: var(--secondary-text);
+        font-size: 0.95rem;
+      }
+
+      .footer-nav a {
+        margin: 0 8px;
+        text-decoration: none;
+        color: var(--text-color);
+        padding: 6px 8px;
+        transition: color 0.2s;
+      }
+
+      .footer-nav a:hover {
+        color: var(--primary-blue);
+      }
+
+      .site-footer p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--secondary-text);
+      }
+
+      @media (max-width: 700px) {
+        .site-footer .footer-inner {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .footer-nav {
+          width: 100%;
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+          margin: 10px 0;
+        }
+        .footer-right {
+          width: 100%;
+          margin-top: 6px;
+        }
+      }
+    </style>
+
+    <script>
+      (function () {
+        const el = document.getElementById('current-year');
+        if (el) el.textContent = new Date().getFullYear();
+      })();
+    </script>
+    <style>
+      .site-section {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 28px 20px;
+        background: var(--card-bg);
+        color: var(--text-color);
+        border-radius: 8px;
+        box-shadow: 0 4px 12px var(--shadow-color);
+      }
+      .site-section h2 {
+        color: var(--primary-blue);
+        margin-bottom: 12px;
+      }
+      .site-section p { color: var(--secondary-text); line-height:1.5; }
+      .visually-hidden { position: absolute !important; height:1px; width:1px; overflow:hidden; clip:rect(1px,1px,1px,1px); white-space:nowrap; }
+    </style>
+
+    <section id="home" class="site-section" role="region" aria-labelledby="home-heading" tabindex="-1">
+      <h2 id="home-heading">Home</h2>
+      <p>Welcome to KDA — celebrating student achievement across academics, sports, arts, and leadership. Use the navigation to explore achievements or the filters above to find specific stories.</p>
+    </section>
+
+    <section id="about" class="site-section" role="region" aria-labelledby="about-heading" tabindex="-1">
+      <h2 id="about-heading">About</h2>
+      <p>KDA is committed to nurturing excellence. This page highlights our mission, values, and the programs that support student growth.</p>
+    </section>
+
+    <section id="contacts" class="site-section" role="region" aria-labelledby="contacts-heading" tabindex="-1">
+      <h2 id="contacts-heading">Contacts</h2>
+      <p>Get in touch: <a href="mailto:info@kda.example">info@kda.example</a> or call (000) 000-0000. You can also visit us on campus during office hours.</p>
+    </section>
+
+    <script>
+      (function () {
+        const map = { home: 'home', about: 'about', contacts: 'contacts', contact: 'contacts' };
+
+        // Enhance header and footer nav links to point to in-page sections and provide smooth, focusable scrolling
+        const navLinks = document.querySelectorAll('.main-header nav a, .site-footer .footer-nav a');
+        navLinks.forEach(a => {
+          const key = a.textContent.trim().toLowerCase();
+          if (map[key]) {
+            const targetId = map[key];
+            a.setAttribute('href', '#' + targetId);
+            a.addEventListener('click', function (e) {
+              // allow normal external links
+              if (this.target && this.target !== '_self') return;
+              e.preventDefault();
+              const target = document.getElementById(targetId);
+              if (!target) return;
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              // focus the region for screen reader users
+              target.focus({ preventScroll: true });
+            });
+          }
+        });
+
+        // Provide a keyboard-friendly "Skip to content" link at the very start of the body for accessibility
+        const firstChild = document.body.firstElementChild;
+        if (firstChild && !document.getElementById('skip-to-content')) {
+          const skip = document.createElement('a');
+          skip.href = '#home';
+          skip.id = 'skip-to-content';
+          skip.className = 'visually-hidden';
+          skip.textContent = 'Skip to main content';
+          skip.addEventListener('focus', () => skip.classList.remove('visually-hidden'));
+          skip.addEventListener('blur', () => skip.classList.add('visually-hidden'));
+          document.body.insertBefore(skip, document.body.firstChild);
+        }
+      })();
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Replace simple placeholder sections with richer, accessible content
+
+      const homeEl = document.getElementById('home');
+      if (homeEl) {
+        homeEl.innerHTML = `
+          <h2 id="home-heading">Welcome to King David Academy</h2>
+          <p>King David Academy (KDA) is a welcoming learning community where every student is encouraged to explore, create, and lead. We balance rigorous academics with strong character-building programs to help young people become confident, responsible citizens.</p>
+          <div style="margin-top:12px; display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+            <div style="flex:1; min-width:220px;">
+              <h3 style="margin:0 0 8px 0; color:var(--primary-blue)">Our Environment</h3>
+              <p style="margin:0; color:var(--secondary-text)">Safe, inclusive classrooms and supportive staff where curiosity and respect are celebrated.</p>
+            </div>
+            <div style="flex:1; min-width:220px;">
+              <h3 style="margin:0 0 8px 0; color:var(--primary-blue)">Opportunities</h3>
+              <p style="margin:0; color:var(--secondary-text)">A wide range of academic pathways, sports, arts, and leadership activities for every interest and talent.</p>
+            </div>
+          </div>
+        `;
+      }
+
+      const aboutEl = document.getElementById('about');
+      if (aboutEl) {
+        aboutEl.innerHTML = `
+          <h2 id="about-heading">About King David Academy</h2>
+          <p><strong>History & Mission:</strong> King David Academy was founded to provide a balanced, values-centered education that prepares students for higher education and life beyond school. Our mission is to nurture academic excellence, personal growth, and community responsibility.</p>
+
+          <p><strong>Academic Program:</strong> KDA offers a broad curriculum with strong foundations in literacy, numeracy, and sciences, complemented by specialized electives in technology, languages, and the arts. Small class sizes and personalized support help students thrive.</p>
+
+          <p><strong>Extracurriculars & Student Life:</strong> Students can join sports teams, performing and visual arts groups, science clubs, and student leadership councils. Many of our alumni credit these programs with helping them develop teamwork, resilience, and confidence.</p>
+
+          <p><strong>Community & Partnerships:</strong> We partner with local organizations and universities to provide internships, mentorships, and community service opportunities. Our school community — parents, staff, and students — works together to foster a respectful, inclusive environment.</p>
+
+          <p><strong>Commitment to Wellbeing:</strong> Counseling, learning support, and health services are available to ensure students succeed academically and emotionally.</p>
+        `;
+      }
+
+      const contactsEl = document.getElementById('contacts');
+      if (contactsEl) {
+        contactsEl.innerHTML = `
+          <h2 id="contacts-heading">Contact & Visit Us</h2>
+
+          <div style="display:flex; gap:24px; flex-wrap:wrap;">
+            <div style="min-width:240px; flex:1;">
+              <h3 style="margin:0 0 8px 0; color:var(--primary-blue)">School Office</h3>
+              <p style="margin:0; color:var(--secondary-text)">
+                King David Academy<br>
+                123 Learning Lane<br>
+                Hometown, State ZIP
+              </p>
+              <p style="margin:8px 0 0 0; color:var(--secondary-text)"><strong>Phone:</strong> (+250)0788765445<br><strong>Email:</strong> <a href="mailto:">kingdavid@gmail.com</a></p>
+              <p style="margin:8px 0 0 0; color:var(--secondary-text)"><strong>Office hours:</strong> Mon–Fri, 8:00 AM – 4:00 PM</p>
+            </div>
+
+            <div style="min-width:260px; flex:1;">
+              <h3 style="margin:0 0 8px 0; color:var(--primary-blue)">Quick Contact</h3>
+              <form id="contact-form" aria-label="Contact King David Academy" style="display:grid; gap:8px;">
+                <input name="name" type="text" placeholder="Your name" required style="padding:10px; border-radius:6px; border:1px solid var(--secondary-text); background:var(--card-bg); color:var(--text-color)">
+                <input name="email" type="email" placeholder="Your email" required style="padding:10px; border-radius:6px; border:1px solid var(--secondary-text); background:var(--card-bg); color:var(--text-color)">
+                <input name="subject" type="text" placeholder="Subject" required style="padding:10px; border-radius:6px; border:1px solid var(--secondary-text); background:var(--card-bg); color:var(--text-color)">
+                <textarea name="message" rows="4" placeholder="Message" required style="padding:10px; border-radius:6px; border:1px solid var(--secondary-text); background:var(--card-bg); color:var(--text-color)"></textarea>
+                <div style="display:flex; gap:8px; align-items:center;">
+                  <button type="submit" style="background:var(--primary-blue); color:white; padding:10px 14px; border-radius:6px; border:none; cursor:pointer;">Send Message</button>
+                  <span id="contact-feedback" style="color:var(--secondary-text); font-size:0.95rem;"></span>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <p style="margin-top:12px; color:var(--secondary-text)">Follow us: <a href="#" aria-label="KDA Facebook">Facebook</a> · <a href="#" aria-label="KDA Twitter">Twitter</a> · <a href="#" aria-label="KDA Instagram">Instagram</a></p>
+        `;
+
+        // Simple contact form handling: open user's mail client with details (fallback without backend)
+        const form = document.getElementById('contact-form');
+        const feedback = document.getElementById('contact-feedback');
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const fd = new FormData(form);
+          const name = fd.get('name') || '';
+          const email = fd.get('email') || '';
+          const subject = fd.get('subject') || 'Contact from website';
+          const message = fd.get('message') || '';
+          const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
+          // Open default mail client
+          window.location.href = `mailto:@kingdavidacademy.cosubject=${encodeURIComponent(subject)}&body=${body}`;
+          feedback.textContent = 'Your email client should open to send the message. If it does not, please email info@kda.example.';
+        });
+      }
+    });
+    </script>
+
 </body>
 </html>
+ 
