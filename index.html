@@ -1,248 +1,408 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ganza Edrick | Personal Portfolio</title>
-  <style>
-    /* ======== GLOBAL STYLES ======== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Poppins", sans-serif;
-      scroll-behavior: smooth;
-    }
+    <meta charset="UTF-8">
+    <title>Interactive JavaScript Website</title>
 
-    body {
-      background: linear-gradient(135deg, #dff6ff, #e3f2fd);
-      color: #333;
-    }
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #eef8f7;
+            color: #063540;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
 
-    header {
-      background: linear-gradient(90deg, #0a4d68, #2e8bc0);
-      color: white;
-      text-align: center;
-      padding: 60px 20px;
-    }
+        header {
+            background: #0b7480;
+            padding: 30px;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
 
-    header h1 {
-      font-size: 2.5rem;
-      letter-spacing: 1px;
-    }
+        /* ----- DARK MODE SWITCH (TOP RIGHT) ----- */
+        .switch-box {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+        }
 
-    header p {
-      font-size: 1.1rem;
-      margin-top: 10px;
-    }
+        .switch-label {
+            position: relative;
+            display: inline-block;
+            width: 55px;
+            height: 28px;
+        }
 
-    nav {
-      background: #fff;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
+        .switch-label input {
+            display: none;
+        }
 
-    nav ul {
-      display: flex;
-      justify-content: center;
-      list-style: none;
-      padding: 15px;
-    }
+        .slider-switch {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: #ccc;
+            border-radius: 34px;
+            transition: 0.4s;
+        }
 
-    nav ul li {
-      margin: 0 15px;
-    }
+        .slider-switch:before {
+            content: "";
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            left: 2px;
+            bottom: 2px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.4s;
+        }
 
-    nav ul li a {
-      color: #0a4d68;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s;
-    }
+        input:checked + .slider-switch {
+            background: #0bd4d4;
+        }
 
-    nav ul li a:hover {
-      color: #2e8bc0;
-    }
+        input:checked + .slider-switch:before {
+            transform: translateX(26px);
+        }
 
-    section {
-      max-width: 1000px;
-      margin: 60px auto;
-      background: white;
-      border-radius: 16px;
-      padding: 40px;
-      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
-      animation: fadeIn 0.8s ease;
-    }
+        /* MENU */
+        .menu-btn {
+            background: #0b7480;
+            color: white;
+            border: none;
+            padding: 12px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+        }
 
-    section h2 {
-      color: #0a4d68;
-      border-bottom: 3px solid #2e8bc0;
-      display: inline-block;
-      margin-bottom: 20px;
-    }
+        nav {
+            background: #07555d;
+            padding: 10px;
+            display: none;
+            text-align: center;
+        }
 
-    .profile {
-      text-align: center;
-    }
+        nav a {
+            color: white;
+            font-size: 18px;
+            margin: 0 15px;
+            text-decoration: none;
+        }
 
-    .profile img {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 5px solid #2e8bc0;
-      margin-bottom: 15px;
-    }
+        main {
+            padding: 20px;
+        }
 
-    .profile h3 {
-      color: #0a4d68;
-      font-size: 1.6rem;
-      margin-bottom: 5px;
-    }
+        .feature-box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #0b7480;
+            margin: 20px 0;
+        }
 
-    .profile p {
-      color: #555;
-      font-size: 1rem;
-    }
+        button {
+            background: #0b7480;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
 
-    .about p {
-      line-height: 1.7;
-      color: #444;
-      font-size: 1.05rem;
-    }
+        button:hover {
+            background: #07555d;
+        }
 
-    .skills ul, .achievements ul {
-      list-style: none;
-      padding-left: 0;
-    }
+        /* Slider */
+        .slider-img {
+            width: 330px;
+            height: 230px;
+            border-radius: 10px;
+            border: 3px solid #0b7480;
+        }
 
-    .skills li, .achievements li {
-      background: #f0faff;
-      padding: 12px 18px;
-      margin-bottom: 10px;
-      border-radius: 10px;
-      border-left: 6px solid #2e8bc0;
-      transition: all 0.3s ease;
-    }
+        /* Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+        }
 
-    .skills li:hover, .achievements li:hover {
-      background: #e8f5fe;
-      transform: translateX(5px);
-    }
+        .gallery img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 3px solid #0b7480;
+        }
 
-    .contact {
-      text-align: center;
-    }
+        /* Dark Mode */
+        .dark-mode {
+            background: #022e32;
+            color: white;
+        }
 
-    .contact a {
-      display: inline-block;
-      background: linear-gradient(90deg, #0a4d68, #2e8bc0);
-      color: white;
-      padding: 12px 25px;
-      border-radius: 25px;
-      text-decoration: none;
-      margin-top: 15px;
-      font-weight: 500;
-      transition: all 0.3s;
-    }
+        .dark-mode header {
+            background: #011a1c;
+        }
 
-    .contact a:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
+        .dark-mode .feature-box {
+            background: #033439;
+        }
 
-    footer {
-      background: #0a4d68;
-      color: white;
-      text-align: center;
-      padding: 20px;
-      margin-top: 50px;
-      font-size: 0.9rem;
-    }
+        .dark-mode nav {
+            background: black;
+        }
+    </style>
+<style>
+/*Additional style
+    <!-- LANGUAGE SELECTOR -->
+    <div class="language-box">
+        <select id="languageSelect">
+            <option value="en" selected>English</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+        </select>
+    </div>
+</header>
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+<style>
+/* Language Selector */
+.language-box {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+}
 
-    /* ======== RESPONSIVE ======== */
-    @media (max-width: 768px) {
-      section {
-        margin: 30px 15px;
-        padding: 25px;
-      }
+#languageSelect {
+    padding: 5px 8px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: none;
+}
+</style>
+ 
 
-      .profile img {
-        width: 120px;
-        height: 120px;
-      }
-    }
-  </style>
-</head>
 <body>
-  <header>
-    <h1>Ganza Edrick</h1>
-    <p>BTEC G11 IT | King David Academy</p>
-  </header>
 
-  <nav>
-    <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#education">Education</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#achievements">Achievements</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
+<header>
+    <h1>Welcome to My Interactive Website</h1>
 
-  <section id="about" class="about profile">
-    <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="Profile photo" />
-    <h3>Hi, I'm Ganza Edrick 👋</h3>
-    <p>
-      I'm a passionate IT student at King David Academy, currently in BTEC G11 IT.  
-      I enjoy learning about technology, creating modern website designs, and exploring new ways to solve real-world problems through innovation.  
-      I’m also a sports enthusiast who enjoys swimming and teamwork activities.
-    </p>
-  </section>
+    <!-- DARK MODE SWITCH -->
+    <div class="switch-box">
+        <label class="switch-label">
+            <input type="checkbox" id="themeToggle">
+            <span class="slider-switch"></span>
+        </label>
+    </div>
+</header>
 
-  <section id="education">
-    <h2>Education</h2>
-    <p><strong>King David Academy</strong> — BTEC Level 3 IT (Ongoing)</p>
-    <p>Focused on computing, programming, data analysis, and digital design. I aim to further my studies in computer science and software development.</p>
-  </section>
+<!-- MENU -->
+<button class="menu-btn" id="menuToggle">☰ Toggle Menu</button>
 
-  <section id="skills" class="skills">
-    <h2>Skills</h2>
-    <ul>
-      <li>Web Design (HTML, CSS, JavaScript)</li>
-      <li>IT Systems and Troubleshooting</li>
-      <li>Data Management and Spreadsheets</li>
-      <li>Team Collaboration and Leadership</li>
-      <li>Creative Thinking and Problem Solving</li>
-    </ul>
-  </section>
+<nav id="navMenu">
+    <a href="#home">Home</a>
+    <a href="#sliderSection">Slider</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#form">Signup</a>
+</nav>
 
-  <section id="achievements" class="achievements">
-    <h2>My Achievements</h2>
-    <ul>
-      <li><strong>Academic Excellence:</strong> Consistently among the top-performing students in IT and Computing subjects.</li>
-      <li><strong>IT Project:</strong> Designed and developed a personal website using HTML, CSS, and JavaScript in Visual Studio Code.</li>
-      <li><strong>Sports Achievement:</strong> Represented the school in inter-school swimming competitions.</li>
-      <li><strong>Community Service:</strong> Participated in environmental cleanup and school tree planting programs.</li>
-      <li><strong>Teamwork Award:</strong> Recognized for collaboration and creativity in group projects.</li>
-    </ul>
-  </section>
+<main>
 
-  <section id="contact" class="contact">
-    <h2>Contact Me</h2>
-    <p>If you'd like to connect or collaborate, feel free to reach out!</p>
-    <a href="mailto:ganzaedrick@example.com">📧 Email Me</a>
-  </section>
+    <!-- HOME -->
+    <section id="home" class="feature-box">
+        <h2>Home</h2>
+        <p>
+            This website is a demonstration of interactive JavaScript features. It includes a responsive menu,
+            dark mode switcher, a dynamic image slider, a full gallery of high-quality images, and a validated signup form.
+        </p>
 
-  <footer>
-    &copy; 2025 Ganza Edrick | BTEC G11 IT | King David Academy
-  </footer>
+        <h3>Features Included:</h3>
+        <ul>
+            <li>✔ Dark/Light mode toggle using a switch</li>
+            <li>✔ Responsive dropdown navigation menu</li>
+            <li>✔ Auto and manual image slider</li>
+            <li>✔ Photo gallery with 10 attractive images</li>
+            <li>✔ JavaScript-based signup form validation</li>
+        </ul>
+    </section>
+
+    <!-- SLIDER -->
+    <section id="sliderSection" class="feature-box">
+        <h2>Image Slider</h2>
+        <img id="slider" class="slider-img" src="https://picsum.photos/id/101/330/230">
+        <br>
+        <button id="prevBtn">Previous</button>
+        <button id="nextBtn">Next</button>
+        <button id="autoBtn">Auto Play</button>
+        <button id="stopBtn">Stop</button>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery" class="feature-box">
+        <h2>Gallery (10 Images)</h2>
+
+        <div class="gallery">
+            <img src="https://picsum.photos/id/300/300/200">
+            <img src="https://picsum.photos/id/301/300/200">
+            <img src="https://picsum.photos/id/302/300/200">
+            <img src="httpsum.photos/id/303/300/200">
+            <img src="https://picsum.photos/id/304/300/200">
+            <img src="https://picsum.photos/id/305/300/200">
+            <img src="https://picsum.photos/id/306/300/200">
+            <img src="https://picsum.photos/id/307/300/200">
+            <img src="https://picsum.photos/id/308/300/200">
+            <img src="https://picsum.photos/id/309/300/200">
+        </div>
+    </section>
+
+    <!-- SIGNUP FORM -->
+    <section id="form" class="feature-box">
+        <h2>Signup Form</h2>
+
+        <form id="signupForm">
+            <label>Name:</label>
+            <input type="text" id="nameField">
+
+            <label>Email:</label>
+            <input type="email" id="emailField">
+
+            <label>Password:</label>
+            <input type="password" id="passwordField">
+
+            <button type="submit">Submit</button>
+        </form>
+
+        <p id="formMessage"></p>
+    </section>
+
+</main>
+
+<script>
+// MENU
+document.getElementById("menuToggle").onclick = () => {
+    let menu = document.getElementById("navMenu");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+};
+
+// DARK MODE SWITCH
+document.getElementById("themeToggle").addEventListener("change", function () {
+    document.body.classList.toggle("dark-mode");
+});
+
+// IMAGE SLIDER
+let slider = document.getElementById("slider");
+let images = [
+    "https://picsum.photos/id/101/330/230",
+    "https://picsum.photos/id/102/330/230",
+    "https://picsum.photos/id/103/330/230",
+    "https://picsum.photos/id/104/330/230",
+    "https://picsum.photos/id/108/330/230"
+];
+let i = 0;
+let autoPlay;
+
+document.getElementById("nextBtn").onclick = () => {
+    i = (i + 1) % images.length;
+    slider.src = images[i];
+};
+
+document.getElementById("prevBtn").onclick = () => {
+    i = (i - 1 + images.length) % images.length;
+    slider.src = images[i];
+};
+
+document.getElementById("autoBtn").onclick = () => {
+    autoPlay = setInterval(() => {
+        i = (i + 1) % images.length;
+        slider.src = images[i];
+    }, 1500);
+};
+
+document.getElementById("stopBtn").onclick = () => clearInterval(autoPlay);
+
+// SIGNUP FORM VALIDATION
+document.getElementById("signupForm").addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    let name = document.getElementById("nameField").value;
+    let email = document.getElementById("emailField").value;
+    let password = document.getElementById("passwordField").value;
+    let msg = document.getElementById("formMessage");
+
+    if (!name || !email || !password) {
+        msg.textContent = "❌ All fields must be completed.";
+        msg.style.color = "red";
+        return;
+    }
+    if (password.length < 6) {
+        msg.textContent = "❌ Password must be at least 6 characters.";
+        msg.style.color = "red";
+        return;
+    }
+
+    msg.textContent = "✔ Form submitted successfully!";
+    msg.style.color = "green";
+});
+</script>
+<!-- Add this just before </body> -->
+
+<footer>
+    <div class="footer-content">
+        <h3>Interactive JS Website</h3>
+        <p>Explore our features: dark mode, slider, gallery, and signup form validation. Thanks for visiting!</p>
+        <div class="footer-links">
+            <a href="#home">Home</a> |
+            <a href="#sliderSection">Slider</a> |
+            <a href="#gallery">Gallery</a> |
+            <a href="#form">Signup</a>
+        </div>
+        <p class="footer-credit">&copy; 2025 My Interactive Website</p>
+    </div>
+</footer>
+
+<style>
+/* Footer Styles */
+footer {
+    background: #0b7480;
+    color: white;
+    text-align: center;
+    padding: 25px 20px;
+    margin-top: 30px;
+}
+
+footer h3 {
+    margin: 0;
+    font-size: 22px;
+}
+
+footer p {
+    margin: 10px 0;
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+    margin: 0 8px;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+.footer-credit {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #d4f0f0;
+}
+</style>
+
 </body>
 </html>
